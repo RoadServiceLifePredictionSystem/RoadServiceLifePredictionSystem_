@@ -209,7 +209,6 @@ class CMAES():
         self.counteval = 0  # счётчик вычислений. Количество итераций = counteval / lam
         self.fitvals = []   
         self.best = BestSolution()
-        self.logger = CMAESDataLogger()  # for convenience and output
 
     def ask(self):
         """
