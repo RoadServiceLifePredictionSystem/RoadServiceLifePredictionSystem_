@@ -9,6 +9,7 @@ import time
 import numpy as np
 from random import normalvariate as random_normalvariate
 from typing import Callable, NamedTuple
+from CMA import fmin
 
 
 class PartialSum(NamedTuple):
