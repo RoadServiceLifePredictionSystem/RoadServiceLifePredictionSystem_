@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[10]:
+# In[13]:
 
 
 import math 
@@ -659,39 +659,35 @@ def argsort(a):
     """
     return sorted(range(len(a)), key=a.__getitem__)  # a.__getitem__(i) = a[i]
 
+def safe_str(s, known_words=None):
+    """
+    Строки в dict `known_words` заменяются их значениями
+    для последующего вычисления с помощью eval.
+    """
+    
+    safe_chars = ' 0123456789.,+-*()[]e<>='
+    if s != str(s):
+        return str(s)
+    if not known_words:
+        known_words = {}
+    stest = s[:]  
+    sret = s[:]  
+    for word in sorted(known_words.keys(), key=len, reverse=True):
+        stest = stest.replace(word, '  ')
+        sret = sret.replace(word, " %s " % known_words[word])
+    for c in stest:
+        if c not in safe_chars:
+            raise ValueError('"%s" is not a safe string'
+                             ' (known words are %s)' % (s, str(known_words)))
+    return sret
 
 
 class RecombinationWeights(list):
     """
     Список уменьшающихся(рекомбинационных) значений веса w_i
-
     
-
-    Class attributes/properties:
-
-    - ``lambda_``: number of weights, alias for ``len(self)``
-    - ``mu``: number of strictly positive weights, i.e.
-      ``sum([wi > 0 for wi in self])``
-    - ``mueff``: variance effective number of positive weights, i.e.
-      ``1 / sum([self[i]**2 for i in range(self.mu)])`` where
-      ``1 == sum([self[i] for i in range(self.mu)])**2``
-    - `mueffminus`: variance effective number of negative weights
-    - `positive_weights`: `np.array` of the strictly positive weights
-    - ``finalized``: `True` if class instance is ready to use
-
-    Class methods not inherited from `list`:
-
-    - `finalize_negative_weights`: main method
-    - `zero_negative_weights`: set negative weights to zero, leads to
-      ``finalized`` to be `True`.
-    - `set_attributes_from_weights`: useful when weight values are
-      "manually" changed, removed or inserted
-    - `asarray`: alias for ``np.asarray(self)``
-    - `do_asserts`: check consistency of weight values, passes also when
-      not yet ``finalized``
-
+    """
     
-"""
     def __init__(self, len_, exponent=1):
         """
         Сумма положительных и отрицательных весов сремится к 1 and -1, соответственно.
