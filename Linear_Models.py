@@ -8,6 +8,7 @@ import numpy as np
 import pandas as pd
 from sklearn import linear_model, ensemble, svm
 from sklearn.model_selection import cross_validate
+from sklearn.preprocessing import PolynomialFeatures
 
 import matplotlib.pyplot as plt
 
@@ -58,7 +59,7 @@ print(mean_1)
 # Модель - метод опорных векторов
 
 model_2 = svm.SVR()
-cv_results_2 = cross_validate(model_1, data_x, data_y, cv=3)
+cv_results_2 = cross_validate(model_2, data_x, data_y, cv=3)
 mean_2 = np.mean(cv_results['test_score'])
 
 print(mean_2)
@@ -70,7 +71,7 @@ print(mean_2)
 # Модель - Регрессия Байесовского хребта
 
 model_3 = linear_model.BayesianRidge()
-cv_results_3 = cross_validate(model_1, data_x, data_y, cv=3)
+cv_results_3 = cross_validate(model_3, data_x, data_y, cv=3)
 mean_3 = np.mean(cv_results['test_score'])
 
 print(mean_3)
@@ -81,8 +82,12 @@ print(mean_3)
 
 # Модель - Линейная регрессия
 
+# возможность использовать полиномиальные модели заданной степени
+poly_features = PolynomialFeatures(degree=2) 
+data_x_poly = poly_features.fit_transform(data_x)
+
 model_4 = linear_model.LinearRegression()
-cv_results_4 = cross_validate(model_1, data_x, data_y, cv=3)
+cv_results_4 = cross_validate(model_4, data_x_poly, data_y, cv=3)
 mean_4 = np.mean(cv_results['test_score'])
 
 print(mean_4)
@@ -94,7 +99,7 @@ print(mean_4)
 # Модель - Хребет
 
 model_5 = linear_model.Ridge()
-cv_results_5 = cross_validate(model_1, data_x, data_y, cv=3)
+cv_results_5 = cross_validate(model_5, data_x, data_y, cv=3)
 mean_5 = np.mean(cv_results['test_score'])
 
 print(mean_5)
