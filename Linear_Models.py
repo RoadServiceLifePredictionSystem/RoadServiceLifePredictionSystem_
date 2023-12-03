@@ -9,6 +9,7 @@ import pandas as pd
 from sklearn import linear_model, ensemble, svm
 from sklearn.model_selection import cross_validate
 from sklearn.preprocessing import PolynomialFeatures
+from auxiliary_functions_and_classes import create_new_columns_according_to_the_specified_combinations
 
 import matplotlib.pyplot as plt
 
@@ -83,8 +84,14 @@ print(mean_3)
 # Модель - Линейная регрессия
 
 # возможность использовать полиномиальные модели заданной степени
-poly_features = PolynomialFeatures(degree=2) 
+
+# если хотим иметь все комбинации данной степени
+poly_features = PolynomialFeatures(degree=2)
 data_x_poly = poly_features.fit_transform(data_x)
+
+# если хотим иметь определённые комбинации
+new_columns = create_new_columns_according_to_the_specified_combinations(data_x, ['x1,x2,x3'])
+data_x_poly = np.hstack([data_x, new_columns])
 
 model_4 = linear_model.LinearRegression()
 cv_results_4 = cross_validate(model_4, data_x_poly, data_y, cv=3)
