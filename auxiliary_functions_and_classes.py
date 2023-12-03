@@ -31,6 +31,29 @@ def exact_solution(A, B):
     return np.dot(np.dot(np.linalg.inv(np.dot(A.T, A)), A.T), B)
 
 
+def create_new_columns_according_to_the_specified_combinations(data, combinations=[]):
+    """
+    Функция, которая создаёт столбцы, в соответствии с полученными на входе комбинацями
+    @params combinations: list 
+        Список строк вида ['x1,x2,x3', 'x2,x3'], где xi означает i столбец, а их комбинация, разделенная запятыми, 
+        обозначает перемножение этих столбцов
+    @return: array of array
+        Список новых колонок
+    """
+    columns = []
+    N = len(data)
+    for comb in combinations:
+        numb_column = [int(axie[1:]) for axie in comb.split(',')]
+        prod = 1
+        value_ = []
+        for i in range(N):
+            value_.append(1)
+            for numb in numb_column:
+                value_[-1] *= data[i][numb - 1]                 
+        columns.append(np.array(value_))       
+    return np.array(columns).T
+
+
 def generator_of_poorly_conditioned_matrices(N: int, sigma=None):
     
     """ 
